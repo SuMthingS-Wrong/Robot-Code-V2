@@ -5,7 +5,9 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 
-// I feel I dont need as many comments as the code is pretty self explanatory but there are six buttons to choose which of the velocity and feedforward coefficient to tune, and theres a button to increase velocity and step size and the values of each coefficient
+/* I feel I don't need as many comments as the code is pretty self explanatory,
+   but there are six buttons to choose which of the velocity and feedforward coefficient to tune,
+   and theres a button to increase velocity and step size and the values of each coefficient */
 public class ShooterTuning extends OpMode {
     MotorEx shooterMotor1 = new MotorEx(hardwareMap, "shooterMotor1", 28, 5800);
     MotorEx shooterMotor2 = new MotorEx(hardwareMap, "shooterMotor2", 28, 5800);
