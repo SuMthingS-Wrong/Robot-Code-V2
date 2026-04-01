@@ -10,7 +10,9 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorGroup;
 import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 
-// I feel I dont need as many comments as the code is pretty self explanatory but there are six buttons to choose which of the velocity and feedforward coefficient to tune, and theres a button to increase velocity and step size and the values of each coefficient
+/* I feel I don't need as many comments as the code is pretty self explanatory,
+   but there are six buttons to choose which of the velocity and feedforward coefficient to tune,
+   and theres a button to increase velocity and step size and the values of each coefficient */
 public class ShooterTuning extends OpMode {
     GamepadEx driver1;
     DcMotor intakeMotor;
