@@ -1,14 +1,23 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+import com.seattlesolvers.solverslib.hardware.motors.MotorGroup;
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 
 // I feel I dont need as many comments as the code is pretty self explanatory but there are six buttons to choose which of the velocity and feedforward coefficient to tune, and theres a button to increase velocity and step size and the values of each coefficient
 public class ShooterTuning extends OpMode {
-    MotorEx shooterMotor1 = new MotorEx(hardwareMap, "shooterMotor1", 28, 5800);
-    MotorEx shooterMotor2 = new MotorEx(hardwareMap, "shooterMotor2", 28, 5800);
+    GamepadEx driver1;
+    DcMotor intakeMotor;
+    MotorEx shooterMotor1;
+    MotorEx shooterMotor2;
+    MotorGroup flywheel;
+    ServoEx angleServo;
 
     public double highVelocity = 1500;
     public double lowVelocity = 800;
@@ -30,12 +39,16 @@ public class ShooterTuning extends OpMode {
     int stepIndex = 1;
     @Override
     public void init() {
-        shooterMotor1.setRunMode(Motor.RunMode.VelocityControl);
-        shooterMotor2.setRunMode(Motor.RunMode.VelocityControl);
-        shooterMotor1.setVeloCoefficients(kP, kI, kD);
-        shooterMotor2.setVeloCoefficients(kP, kI, kD);
-        shooterMotor1.setFeedforwardCoefficients(kS,kV, kA);
-        shooterMotor2.setFeedforwardCoefficients(kS,kV, kA);
+        driver1 = new GamepadEx(gamepad1);
+        angleServo = new ServoEx(hardwareMap, "shooterAngleServo");
+        shooterMotor1 = new MotorEx(hardwareMap, "shooterMotor1", 28, 5800);
+        shooterMotor2 = new MotorEx(hardwareMap, "shooterMotor2", 28, 5800);
+        shooterMotor2.setInverted(true);
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");;
+        flywheel = new MotorGroup(shooterMotor1, shooterMotor2);
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+        flywheel.setVeloCoefficients(kP,kI,kD);
+        flywheel.setFeedforwardCoefficients(kS,kV,kA);
         telemetry.addLine("Init Complete");
     }
 
@@ -50,6 +63,10 @@ public class ShooterTuning extends OpMode {
         }
         if (gamepad1.leftBumperWasPressed()){
             stepIndex = (stepIndex+1)%stepSizes.length;
+        }
+        if (driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0){
+            telemetry.addData("Intaking","True");
+            intakeMotor.setPower(-1*driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
         }
 
         if (gamepad1.xWasPressed()){
@@ -109,11 +126,11 @@ public class ShooterTuning extends OpMode {
         shooterMotor1.setFeedforwardCoefficients(kS,kV, kA);
         shooterMotor2.setFeedforwardCoefficients(kS,kV, kA);
         shooterMotor1.setVelocity(currTargetVelocity);
-        shooterMotor2.setVelocity(currTargetVelocity);
+        shooterMotor2.setVelocity(-currTargetVelocity);
         double currVelocity1 = shooterMotor1.getVelocity();
         double currVelocity2 = shooterMotor2.getVelocity();
         double error1 = currTargetVelocity - currVelocity1;
-        double error2 = currTargetVelocity - currVelocity2;
+        double error2 = currTargetVelocity + currVelocity2;
         telemetry.addData("Currently Tuning", tuning);
         telemetry.addData("P", kP);
         telemetry.addData("I", kI);

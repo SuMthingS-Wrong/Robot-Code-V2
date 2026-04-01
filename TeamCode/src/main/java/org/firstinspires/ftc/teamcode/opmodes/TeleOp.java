@@ -1,0 +1,72 @@
+package org.firstinspires.ftc.teamcode.opmodes;
+
+import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.button.Trigger;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import org.firstinspires.ftc.teamcode.commands.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
+import com.seattlesolvers.solverslib.command.button.Button;
+import com.seattlesolvers.solverslib.command.button.GamepadButton;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+
+
+public class TeleOp extends CommandOpMode {
+    private DriveSubsystem m_drive;
+
+
+    private IntakeSubsystem intake;
+    private ShooterSubsystem shooter;
+    private VisionSubsystem vision;
+    private TurretSubsystem turret;
+    private Drive m_driveCommand;
+    private GamepadEx driver1;
+    private Button m_shootButton, m_outtakeButton, increaseVelocityButton, decreaseVelocityButton, increaseAngleButton, decreaseAngleButton;
+    private Trigger m_intakeButton;
+
+    @Override
+    public void initialize() {
+        m_drive = new DriveSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap);
+        vision = new VisionSubsystem(hardwareMap);
+        turret = new TurretSubsystem(hardwareMap);
+        shooter = new ShooterSubsystem(hardwareMap);
+        driver1 = new GamepadEx(gamepad1);
+        m_driveCommand = new Drive(m_drive, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+
+
+
+        m_outtakeButton = (new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER))
+                .whileHeld(new InstantCommand(intake::outtake, intake));
+        m_intakeButton = (new Trigger(()->driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0))
+                .whenActive(new InstantCommand((()->{
+                    intake.controlledIntake(driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+                } ), intake));
+        increaseAngleButton = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP))
+                .whenPressed(new InstantCommand((()-> {
+                    shooter.increaseAngle();
+                }), shooter));
+        decreaseAngleButton = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN))
+                .whenPressed(new InstantCommand((()-> {
+                    shooter.decreaseAngle();
+                }), shooter));
+        increaseVelocityButton = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT))
+                .whenPressed(new InstantCommand((()-> {
+                    shooter.increaseRPM();
+                }), shooter));
+        decreaseVelocityButton = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT))
+                .whenPressed(new InstantCommand((()-> {
+                    shooter.decreaseRPM();
+                }), shooter));
+
+
+        register(m_drive, shooter, intake);
+        m_drive.setDefaultCommand(m_driveCommand);
+    }
+
+
+}
