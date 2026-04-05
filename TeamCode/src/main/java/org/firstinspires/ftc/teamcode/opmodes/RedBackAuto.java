@@ -20,12 +20,14 @@ public class RedBackAuto extends CommandOpMode {
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     // Poses
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
-    private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
-    private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
-    private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
+    private final Pose startPose = new Pose(88.52336448598135, 7.775700934579431, Math.toRadians(90));
+    private final Pose scorePose = new Pose(88.52336448598135, 7.775700934579431, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(135.4018691588785, 7.738317757009346, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(118.37383177570094, 35.308411214953274131, Math.toRadians(0));
+    private final Pose pickup2Control = new Pose(91.79906542056075,38.64485981308411);
+
     private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
-    private final Pose parkPose = new Pose(68, 96, Math.toRadians(-90));
+    private final Pose parkPose = new Pose(88.52336448598135, 29.94392523364487, Math.toRadians(90));
 
     // Path chains
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;

@@ -81,4 +81,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shootTemp(){
 
     }
+    @Override
+    public void periodic(){
+//        shoot(distanc)
+    }
 }

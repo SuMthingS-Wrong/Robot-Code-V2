@@ -22,12 +22,13 @@ public class BlueBackAuto extends CommandOpMode {
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     // Poses
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
-    private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
-    private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
-    private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
+    private final Pose startPose = new Pose(56.22429906542056, 7.775700934579431, Math.toRadians(90));
+    private final Pose scorePose = new Pose(56.22429906542056, 7.775700934579431, Math.toRadians(90));
+    private final Pose pickup1Pose = new Pose(7.327102803738322, 7.738317757009346, Math.toRadians(180));
+    private final Pose pickup2Pose = new Pose(23.719626168224305, 35.98130841121495, Math.toRadians(180));
+    private final Pose pickup2Control = new Pose(56.808411214953274,38.64485981308411);
     private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
-    private final Pose parkPose = new Pose(68, 96, Math.toRadians(-90));
+    private final Pose parkPose = new Pose(56.22429906542056, 30.39252336448599, Math.toRadians(90));
 
     // Path chains
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;

@@ -22,12 +22,17 @@ public class RedForwardAuto extends CommandOpMode {
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     // Poses
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
-    private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
-    private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
-    private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
-    private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
-    private final Pose parkPose = new Pose(68, 96, Math.toRadians(-90));
+    private final Pose startPose = new Pose(117.68224299065422, 128.67289719626166, Math.toRadians(45));
+    private final Pose pickup1Pose = new Pose(120.14953271028038, 59.10280373831775, Math.toRadians(0));
+    private final Pose pickup1Control = new Pose(84.49532710280371, 82.86915887850468);
+    private final Pose shoot1 = new Pose(97.00000000000001, 90.06542056074771, Math.toRadians(45));
+    private final Pose pickup2 = new Pose(120.14953271028038, 59.10280373831775, Math.toRadians(0));
+    private final Pose pickup2Control = new Pose(191.46491256752866, 56.35276302654658);
+
+    private final Pose shoot2 = new Pose(90.49532710280374, 83.33644859813084, Math.toRadians(45));
+    private final Pose classifier = new Pose(132.15887850467288, 60.803738317756995, Math.toRadians(21));
+
+
 
     // Path chains
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;

@@ -22,7 +22,10 @@ public class BlueForwardAuto extends CommandOpMode {
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     // Poses
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
+
+    //  private final Pose startPose = new Pose(26.616822429906556, 128.67289719626163, Math.toRadians(135));
+    //   this is incase we decide to instantly shoot at the start of auto
+    private final Pose startPose = new Pose(34.24299065420561, 136.07476635514016, Math.toRadians(-90));
     private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
     private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
     private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
