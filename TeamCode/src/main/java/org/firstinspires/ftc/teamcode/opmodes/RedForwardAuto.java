@@ -35,57 +35,58 @@ public class RedForwardAuto extends CommandOpMode {
 
 
     // Path chains
-    private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;
+    private PathChain grabPickupReusable, grabPickup1, grabPickup2, grabPickup3;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
     public void buildPaths() {
-        scorePreload = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, scorePose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
-                .build();
-
         grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup1Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
+                .addPath(new BezierCurve(startPose, pickup1Control, pickup1Pose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
         scorePickup1 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup1Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(pickup1Pose, shoot1))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), shoot1.getHeading())
                 .build();
 
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup2Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup2Pose.getHeading())
+                .addPath(new BezierCurve(shoot1, pickup2Control, pickup2))
+                .setLinearHeadingInterpolation(shoot1.getHeading(), pickup2.getHeading())
                 .build();
 
         scorePickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup2Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(pickup2, shoot2))
+                .setLinearHeadingInterpolation(pickup2.getHeading(), shoot2.getHeading())
                 .build();
 
         grabPickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup3Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup3Pose.getHeading())
+                .addPath(new BezierLine(shoot2, classifier))
+                .setLinearHeadingInterpolation(shoot2.getHeading(), classifier.getHeading())
                 .build();
 
         scorePickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup3Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup3Pose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(classifier, shoot1))
+                .setLinearHeadingInterpolation(classifier.getHeading(), shoot1.getHeading())
+                .build();
+        grabPickupReusable = follower.pathBuilder()
+                .addPath(new BezierLine(shoot1, classifier))
+                .setLinearHeadingInterpolation(shoot1.getHeading(), classifier.getHeading())
                 .build();
 
-        park = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        scorePose,
-                        new Pose(68, 110), // Control point
-                        parkPose)
-                )
-                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
-                .build();
+
+
+//        park = follower.pathBuilder()
+//                .addPath(new BezierCurve(
+//                        scorePose,
+//                        new Pose(68, 110), // Control point
+//                        parkPose)
+//                )
+//                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
+//                .build();
     }
 
     // Mechanism commands - replace these with your actual subsystem commands
-    private InstantCommand openOuttakeClaw() {
+    private InstantCommand shootFromStart() {
         return new InstantCommand(() -> {
             // Example: outtakeSubsystem.openClaw();
         });
@@ -120,10 +121,8 @@ public class RedForwardAuto extends CommandOpMode {
 
         // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
-                // Score preload
-                new FollowPathCommand(follower, scorePreload),
-                openOuttakeClaw(),
-                new WaitCommand(1000), // Wait 1 second
+
+                shootFromStart(),
 
                 // First pickup cycle
                 new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5), // Sets globalMaxPower to 50% for all future paths
@@ -143,10 +142,14 @@ public class RedForwardAuto extends CommandOpMode {
                 grabSample(),
                 new FollowPathCommand(follower, scorePickup3),
                 scoreSample(),
-
+                // Fourth pickup
+                new FollowPathCommand(follower, grabPickupReusable),
+                grabSample(),
+                new FollowPathCommand(follower, scorePickup3),
+                scoreSample()
                 // Park
-                new FollowPathCommand(follower, park, false), // park with holdEnd false
-                level1Ascent()
+//                new FollowPathCommand(follower, park, false), // park with holdEnd false
+//                level1Ascent()
         );
 
         // Schedule the autonomous sequence
