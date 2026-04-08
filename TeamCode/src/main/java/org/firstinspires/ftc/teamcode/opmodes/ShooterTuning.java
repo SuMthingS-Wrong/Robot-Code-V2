@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -13,6 +14,7 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 /* I feel I don't need as many comments as the code is pretty self explanatory,
    but there are six buttons to choose which of the velocity and feedforward coefficient to tune,
    and theres a button to increase velocity and step size and the values of each coefficient */
+@TeleOp
 public class ShooterTuning extends OpMode {
     GamepadEx driver1;
     DcMotor intakeMotor;

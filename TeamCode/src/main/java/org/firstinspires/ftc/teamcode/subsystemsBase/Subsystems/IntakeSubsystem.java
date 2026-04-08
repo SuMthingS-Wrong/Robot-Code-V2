@@ -11,7 +11,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void intake(){
-        intakeMotor.setPower(-1);
+        intakeMotor.setPower(-0.5);
     }
     public void outtake() {
         intakeMotor.setPower(1);

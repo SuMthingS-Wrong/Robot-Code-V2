@@ -25,8 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
     MotorGroup flywheel;
     public ShooterSubsystem(HardwareMap hwMap){
         angleServo = new ServoEx(hwMap, "shooterAngleServo");
-        shooterMotor1 = new MotorEx(hwMap, "shooterMotor1", 28, 5800);
-        shooterMotor2 = new MotorEx(hwMap, "shooterMotor2", 28, 5800);
+        shooterMotor1 = new MotorEx(hwMap, "shooterMotor1", 28, 6000);
+        shooterMotor2 = new MotorEx(hwMap, "shooterMotor2", 28, 6000);
         shooterMotor2.setInverted(true);
         flywheel = new MotorGroup(shooterMotor1, shooterMotor2);
         flywheel.setRunMode(Motor.RunMode.VelocityControl);
@@ -78,8 +78,15 @@ public class ShooterSubsystem extends SubsystemBase {
         angleServo.set(servoVal/10);
     }
 
+
     public void shootTemp(){
 
+    }
+    public double getRPMFromVelocity(double velocity){
+        return velocity;
+    }
+    public double getServoPosFromDegrees(double angle){
+        return angle;
     }
     @Override
     public void periodic(){

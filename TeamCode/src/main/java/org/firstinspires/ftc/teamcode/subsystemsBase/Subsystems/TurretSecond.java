@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
-public class TurretSubsystem extends SubsystemBase {
-
+public class TurretSecond extends SubsystemBase {
 //    public class TurretServo extends ServoEx {
 //        public TurretServo(HardwareMap hwMap, String id){
 //            super(hwMap,id);
@@ -16,36 +15,32 @@ public class TurretSubsystem extends SubsystemBase {
 //        }
 //    }
 
-    private final ServoEx servo1;
-    private double degree = 0;
-    public TurretSubsystem(final HardwareMap hwMap){
-        servo1 = new ServoEx(hwMap, "servo1");
+    private final ServoEx servo2;
+
+    public TurretSecond(final HardwareMap hwMap){
+        servo2 = new ServoEx(hwMap, "servo2");
     }
 
-
     public void set360() {
-        servo1.set(0.76);
+        servo2.set(0.76);
 
     }
 
     public void set90() {
-        servo1.set(0.76/4);
+        servo2.set(0.76/4);
 
     }
     public void set180() {
-        servo1.set(0.76/2);
+        servo2.set(0.76/2);
 
     }
     public void set0() {
-        servo1.set(0);
+        servo2.set(0);
 
     }
-
-
-
     public double getPosition(){
-            return servo1.getRawPosition();
+            return servo2.getRawPosition();
 
-    }
 
+}
 }

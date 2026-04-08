@@ -7,8 +7,8 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
@@ -92,13 +92,13 @@ public class RedForwardAuto extends CommandOpMode {
         });
     }
 
-    private InstantCommand grabSample() {
+    private InstantCommand intakeArtefacts() {
         return new InstantCommand(() -> {
             // Example: intakeSubsystem.grabSample();
         });
     }
 
-    private InstantCommand scoreSample() {
+    private InstantCommand shootArtefacts() {
         return new InstantCommand(() -> {
             // Example: outtakeSubsystem.scoreSample();
         });
@@ -125,28 +125,27 @@ public class RedForwardAuto extends CommandOpMode {
                 shootFromStart(),
 
                 // First pickup cycle
-                new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5), // Sets globalMaxPower to 50% for all future paths
-                // (unless a custom maxPower is given)
-                grabSample(),
+                new ParallelCommandGroup(new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5), intakeArtefacts()),
+
                 new FollowPathCommand(follower, scorePickup1),
-                scoreSample(),
+                shootArtefacts(),
 
                 // Second pickup cycle
                 new FollowPathCommand(follower, grabPickup2),
-                grabSample(),
+                intakeArtefacts(),
                 new FollowPathCommand(follower, scorePickup2, 1.0), // Overrides maxPower to 100% for this path only
-                scoreSample(),
+                shootArtefacts(),
 
                 // Third pickup cycle
                 new FollowPathCommand(follower, grabPickup3),
-                grabSample(),
+                intakeArtefacts(),
                 new FollowPathCommand(follower, scorePickup3),
-                scoreSample(),
+                shootArtefacts(),
                 // Fourth pickup
                 new FollowPathCommand(follower, grabPickupReusable),
-                grabSample(),
+                intakeArtefacts(),
                 new FollowPathCommand(follower, scorePickup3),
-                scoreSample()
+                shootArtefacts()
                 // Park
 //                new FollowPathCommand(follower, park, false), // park with holdEnd false
 //                level1Ascent()
