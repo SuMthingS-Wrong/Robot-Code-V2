@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 
     //robot mass needs to be measured and changed based off mass of robot
-    public static FollowerConstants followerConstants = new FollowerConstants().mass(10).centripetalScaling(0);
+    public static FollowerConstants followerConstants = new FollowerConstants().mass(7.8).centripetalScaling(0);
 
     /*
     Mecanum drive constants have been added
@@ -27,10 +27,17 @@ public class Constants {
             .rightRearMotorName("backRight")
             .leftRearMotorName("backLeft")
             .leftFrontMotorName("frontLeft")
+<<<<<<< HEAD
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+=======
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+>>>>>>> 003fdb6694c6b5bbee15a8e69128e9907e784aeb
 
     /* Pinpoint constants have been added
 
