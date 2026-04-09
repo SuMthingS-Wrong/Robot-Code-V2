@@ -6,19 +6,18 @@ import com.pedropathing.math.Vector;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.pedropathing.math.MathFunctions;
 import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.TurretSubsystem;
 
 public class MathShooter extends CommandBase {
     private Follower follower;
     private ShooterSubsystem shooter;
     Pose goalPose = ShooterConstants.GOAL_POS_RED;
-    private TurretSubsystem turret;
-    public MathShooter(Follower robotFollower, ShooterSubsystem m_shooter, TurretSubsystem m_turret, String alliance){
+
+    public MathShooter(Follower robotFollower, ShooterSubsystem m_shooter, String alliance){
         follower = robotFollower;
         shooter=m_shooter;
-        turret=m_turret;
+
         if(alliance.equals("blue")){goalPose = ShooterConstants.GOAL_POS_BLUE;}
-        addRequirements(m_shooter, m_turret);
+        addRequirements(m_shooter);
     }
     @Override
     public void execute(){

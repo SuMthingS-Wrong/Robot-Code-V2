@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
     private Motor frontRight;
     private Motor frontLeft;
     private Motor backRight;
+    Follower follower;
 //    private final Limelight3A limelight;
     private Motor backLeft;
     double axial;
@@ -21,6 +25,7 @@ public class DriveSubsystem extends SubsystemBase {
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        limelight.pipelineSwitch(0);
 //        limelight.start();
+        follower = Constants.createFollower(hardwareMap);
          frontLeft = new Motor(hardwareMap, "frontLeft");
         backLeft = new Motor(hardwareMap, "backLeft");
         frontRight = new Motor(hardwareMap, "frontRight");
@@ -44,6 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
+        follower.update();
         double frontLeftPower = axial + lateral + yaw;
         double frontRightPower = (axial - lateral) - yaw;
         double backLeftPower = (axial - lateral) + yaw;
@@ -60,5 +66,14 @@ public class DriveSubsystem extends SubsystemBase {
         frontRight.set(frontRightPower);
         backLeft.set(backLeftPower);
         backRight.set(backRightPower);
+    }
+    public Pose getPose(){
+        return follower.getPose();
+    }
+    public Vector getVelocity(){
+        return follower.getVelocity();
+    }
+    public double getHeading(){
+        return follower.getHeading();
     }
 }

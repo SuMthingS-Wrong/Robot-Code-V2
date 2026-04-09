@@ -15,4 +15,5 @@ public class GateSubsystem extends SubsystemBase {
     public void tempDecreasePos(){
         gate.set(gate.getRawPosition() - 0.01);
     }
+    public double getPosition(){return gate.getRawPosition();}
 }
