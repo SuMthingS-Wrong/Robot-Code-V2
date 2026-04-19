@@ -25,7 +25,7 @@ public class PedroAutoSample extends CommandOpMode {
     private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
     private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
     private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
-    private final Pose parkPose = new Pose(68, 96, Math.tcoRadians(-90));
+    private final Pose parkPose = new Pose(68, 96, Math.toRadians(-90));
 
     // Path chains
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;

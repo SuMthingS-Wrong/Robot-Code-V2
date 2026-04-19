@@ -18,7 +18,7 @@ public class GateTest extends CommandOpMode {
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     private GamepadEx driver1;
-    private Button left, right;
+    private Button left, right, start, stop;
     @Override
     public void initialize(){
         super.reset();
@@ -26,6 +26,8 @@ public class GateTest extends CommandOpMode {
         gate = new GateSubsystem(hardwareMap);
         left = (new GamepadButton(driver1, GamepadKeys.Button.X)).whenHeld(new InstantCommand((()-> gate.tempIncreasePos()), gate));
         right = (new GamepadButton(driver1, GamepadKeys.Button.CROSS)).whenHeld(new InstantCommand((()->gate.tempDecreasePos()), gate));
+        start = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP)).whenHeld(new InstantCommand((()-> gate.startShooter()), gate));
+        stop = (new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN)).whenHeld(new InstantCommand((()->gate.stopShooter()), gate));
         register(gate);
 
     }

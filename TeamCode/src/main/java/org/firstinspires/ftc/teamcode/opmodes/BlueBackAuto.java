@@ -12,34 +12,35 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
+import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
 import com.seattlesolvers.solverslib.util.TelemetryData;
 
+import org.firstinspires.ftc.teamcode.commands.ShooterConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.utils.Shooting;
 
 @Autonomous
 public class BlueBackAuto extends CommandOpMode {
     private Follower follower;
+    Shooting ShooterFunctions = new Shooting();
     TelemetryData telemetryData = new TelemetryData(telemetry);
 
     // Poses
-    private final Pose startPose = new Pose(56.22429906542056, 7.775700934579431, Math.toRadians(90));
-    private final Pose scorePose = new Pose(56.22429906542056, 7.775700934579431, Math.toRadians(90));
+    private Pose scorePose;
+    private final Pose startPose = new Pose(56.22429906542056, 7.6, Math.toRadians(90));
     private final Pose pickup1Pose = new Pose(7.327102803738322, 7.738317757009346, Math.toRadians(180));
     private final Pose pickup2Pose = new Pose(23.719626168224305, 35.98130841121495, Math.toRadians(180));
     private final Pose pickup2Control = new Pose(56.808411214953274,38.64485981308411);
-    private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
+
+
     private final Pose parkPose = new Pose(56.22429906542056, 30.39252336448599, Math.toRadians(90));
 
     // Path chains
-    private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;
+    private PathChain  grabPickup1, grabPickup2, grabPickup3, grabPickup4;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
     public void buildPaths() {
-        scorePreload = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, scorePose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
-                .build();
-
+        scorePose = startPose.setHeading(ShooterFunctions.getAlignedHeading(startPose, ShooterConstants.GOAL_POS_BLUE));
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup1Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
@@ -61,19 +62,18 @@ public class BlueBackAuto extends CommandOpMode {
                 .build();
 
         grabPickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup3Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup3Pose.getHeading())
+                .addPath(new BezierLine(scorePose, pickup1Pose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
         scorePickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup3Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup3Pose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(pickup1Pose, scorePose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
                 .build();
 
         park = follower.pathBuilder()
-                .addPath(new BezierCurve(
+                .addPath(new BezierLine(
                         scorePose,
-                        new Pose(68, 110), // Control point
                         parkPose)
                 )
                 .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
@@ -81,27 +81,15 @@ public class BlueBackAuto extends CommandOpMode {
     }
 
     // Mechanism commands - replace these with your actual subsystem commands
-    private InstantCommand openOuttakeClaw() {
+    private InstantCommand shoot() {
         return new InstantCommand(() -> {
             // Example: outtakeSubsystem.openClaw();
         });
     }
 
-    private InstantCommand grabSample() {
+    private InstantCommand intake() {
         return new InstantCommand(() -> {
             // Example: intakeSubsystem.grabSample();
-        });
-    }
-
-    private InstantCommand scoreSample() {
-        return new InstantCommand(() -> {
-            // Example: outtakeSubsystem.scoreSample();
-        });
-    }
-
-    private InstantCommand level1Ascent() {
-        return new InstantCommand(() -> {
-            // Example: hangSubsystem.level1Ascent();
         });
     }
 
@@ -117,32 +105,28 @@ public class BlueBackAuto extends CommandOpMode {
         // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 // Score preload
-                new FollowPathCommand(follower, scorePreload),
-                openOuttakeClaw(),
-                new WaitCommand(1000), // Wait 1 second
-
+                new TurnToCommand(follower, ShooterFunctions.getAlignedHeading(startPose, ShooterConstants.GOAL_POS_BLUE)),
+                shoot(),
                 // First pickup cycle
-                new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5), // Sets globalMaxPower to 50% for all future paths
-                // (unless a custom maxPower is given)
-                grabSample(),
+                new FollowPathCommand(follower, grabPickup1),
+                intake(),
                 new FollowPathCommand(follower, scorePickup1),
-                scoreSample(),
-
+                shoot(),
                 // Second pickup cycle
                 new FollowPathCommand(follower, grabPickup2),
-                grabSample(),
-                new FollowPathCommand(follower, scorePickup2, 1.0), // Overrides maxPower to 100% for this path only
-                scoreSample(),
+                intake(),
+
+                new FollowPathCommand(follower, scorePickup2),
+                shoot(),
 
                 // Third pickup cycle
                 new FollowPathCommand(follower, grabPickup3),
-                grabSample(),
+                intake(),
                 new FollowPathCommand(follower, scorePickup3),
-                scoreSample(),
+                shoot(),
 
                 // Park
-                new FollowPathCommand(follower, park, false), // park with holdEnd false
-                level1Ascent()
+                new FollowPathCommand(follower, park)
         );
 
         // Schedule the autonomous sequence

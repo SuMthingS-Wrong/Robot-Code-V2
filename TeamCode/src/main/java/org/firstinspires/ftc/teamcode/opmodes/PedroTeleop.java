@@ -26,9 +26,9 @@ public class PedroTeleop extends CommandOpMode {
     private IntakeSubsystem intake;
     private ShooterSubsystem shooter;
     private VisionSubsystem vision;
-    private TurretSubsystem turret;
+
     private Drive m_driveCommand;
-    private GamepadEx driver1 = new GamepadEx(gamepad1);
+    private GamepadEx driver1;
     private Button m_shootButton, m_outtakeButton, increaseVelocityButton, decreaseVelocityButton, increaseAngleButton, decreaseAngleButton;
     private Trigger m_intakeButton;
 
@@ -40,7 +40,7 @@ public class PedroTeleop extends CommandOpMode {
         m_drive = new DriveSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         vision = new VisionSubsystem(hardwareMap);
-        turret = new TurretSubsystem(hardwareMap);
+
         shooter = new ShooterSubsystem(hardwareMap);
         driver1 = new GamepadEx(gamepad1);
         m_driveCommand = new Drive(m_drive, () -> driver1.getLeftY(), ()-> driver1.getLeftX(), ()->driver1.getRightX());
