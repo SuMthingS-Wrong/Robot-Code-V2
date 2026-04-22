@@ -7,11 +7,9 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
-import org.firstinspires.ftc.teamcode.commands.Drive;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.ShooterSubsystem;
 
 import com.seattlesolvers.solverslib.command.button.Button;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
@@ -27,14 +25,13 @@ public class RedTeleOp extends CommandOpMode {
 //    private ShooterSubsystem shooter;
 //    private VisionSubsystem vision;
 //    private TurretSubsystem turret;
-    private Drive m_driveCommand;
     private GamepadEx driverOp;
     private Button m_shootButton, m_outtakeButton, increaseVelocityButton, decreaseVelocityButton, increaseAngleButton, decreaseAngleButton;
     private Trigger m_intakeButton;
 
     @Override
     public void initialize() {
-//        super.reset();
+        super.reset();
         m_drive = new DriveSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         follower = Constants.createFollower(hardwareMap);
@@ -70,8 +67,6 @@ public class RedTeleOp extends CommandOpMode {
 
 
 //        register(m_drive, shooter, intake);
-        register(m_drive);
-        m_drive.setDefaultCommand(m_driveCommand);
     }
     @Override
     public void run(){

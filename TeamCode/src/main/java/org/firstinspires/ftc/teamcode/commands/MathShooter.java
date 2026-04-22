@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.ShooterSubsystem
 public class MathShooter extends CommandBase {
     private Follower follower;
     private ShooterSubsystem shooter;
-    Pose goalPose = ShooterConstants.GOAL_POS_RED;
+    Pose goalPose = RobotConstants.GOAL_POS_RED;
 
     public MathShooter(Follower robotFollower, ShooterSubsystem m_shooter, String alliance){
         follower = robotFollower;
         shooter=m_shooter;
 
-        if(alliance.equals("blue")){goalPose = ShooterConstants.GOAL_POS_BLUE;}
+        if(alliance.equals("blue")){goalPose = RobotConstants.GOAL_POS_BLUE;}
         addRequirements(m_shooter);
     }
     @Override
@@ -27,15 +27,15 @@ public class MathShooter extends CommandBase {
         Vector robotToGoalVector = new Vector(dx,dy);
         // constants
         double g = 32.174 * 12;
-        double x = robotToGoalVector.getMagnitude() - ShooterConstants.PASS_THROUGH_POINT_RADIUS;
-        double y = ShooterConstants.SCORE_HEIGHT;
-        double a = ShooterConstants.SCORE_ANGLE;
+        double x = robotToGoalVector.getMagnitude() - RobotConstants.PASS_THROUGH_POINT_RADIUS;
+        double y = RobotConstants.SCORE_HEIGHT;
+        double a = RobotConstants.SCORE_ANGLE;
 
         // calculate initial launch components
         double hoodAngle = MathFunctions.clamp(
                 Math.atan(2*y / x - Math.tan(a)),
-                ShooterConstants.HOOD_MAX_ANGLE,
-                ShooterConstants.HOOD_MIN_ANGLE
+                RobotConstants.HOOD_MAX_ANGLE,
+                RobotConstants.HOOD_MIN_ANGLE
         );
 
         double flywheelSpeed = Math.sqrt(
@@ -62,8 +62,8 @@ public class MathShooter extends CommandBase {
         // recalculate launch components
         hoodAngle = MathFunctions.clamp(
                 Math.atan(vz / nvr),
-                ShooterConstants.HOOD_MAX_ANGLE,
-                ShooterConstants.HOOD_MIN_ANGLE
+                RobotConstants.HOOD_MAX_ANGLE,
+                RobotConstants.HOOD_MIN_ANGLE
         );
 
         flywheelSpeed = Math.sqrt(

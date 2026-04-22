@@ -1,0 +1,91 @@
+package org.firstinspires.ftc.teamcode.Test;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
+
+public class kPSubsystem extends SubsystemBase {
+    ServoEx angleServo;
+    MotorEx shooterMotor;
+    double kS = 0;
+    double kV = 0;
+    double kA = 0;
+    double kP = 0;
+
+    int targetRpm = 0;
+    double[] stepSizes = {0.001, 0.0001};
+    double step = 0.001;
+    public kPSubsystem(HardwareMap hwMap){
+        angleServo = new ServoEx(hwMap, "shooterAngleServo");
+        shooterMotor = new MotorEx(hwMap, "shooterMotor1", 28, 6000);
+        shooterMotor.setFeedforwardCoefficients(kS, kV, kA);
+
+
+        shooterMotor.setRunMode(Motor.RunMode.VelocityControl);
+//        flywheel = new MotorGroup(shooterMotor1, shooterMotor2);
+//        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+//        flywheel.setVeloCoefficients(kP,kI,kD);
+//        flywheel.setFeedforwardCoefficients(kS,kV,kA);
+    }
+
+    //    placeholders for now
+    public void setShooter(int rpm){
+        targetRpm = rpm;
+        shooterMotor.set(rpm);
+
+    }
+    public void stopShooter(){
+        shooterMotor.set(0);
+    }
+
+
+    //    public void decreaseAngle(){
+//        double position = angleServo.getRawPosition();
+//        angleServo.set(position-0.01);
+//    }
+//    public void increaseAngle(){
+//        double position = angleServo.getRawPosition();
+//
+//        angleServo.set(position+0.01);
+//    }
+//    public double getServoPosition(){
+//        return angleServo.getRawPosition();
+//    } I LIKE MENNNNNNNNNNNN - Abdul
+    public void incKP(){
+        kP +=step;
+        shooterMotor.setFeedforwardCoefficients(kS, kA, kV);
+        shooterMotor.setVeloCoefficients(kP, 0, 0);
+    }
+    public void decKP(){
+        kP -=step;
+        shooterMotor.setFeedforwardCoefficients(kS, kA, kV);
+        shooterMotor.setVeloCoefficients(kP, 0, 0);
+    }
+    public void coarse(){
+        step = stepSizes[0];
+
+    }
+    public double getCurrStep(){
+        return step;
+    }
+    public void fine(){
+        step = stepSizes[1];
+        kS+=step;
+    }
+
+
+    public double getSpeed() {
+        return shooterMotor.getVelocity();
+    }
+
+    public double getKV(){
+        return kA;
+    }
+    public double getTargetVelocity(){
+        return targetRpm;
+    }
+
+}
+
+

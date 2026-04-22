@@ -6,7 +6,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import org.firstinspires.ftc.teamcode.commands.Drive;
+
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystemsBase.Subsystems.IntakeSubsystem;
@@ -20,14 +20,12 @@ import com.seattlesolvers.solverslib.util.TelemetryData;
 
 @TeleOp
 public class PedroTeleop extends CommandOpMode {
-    private DriveSubsystem m_drive;
     Follower follower;
     TelemetryData telemetryData = new TelemetryData(telemetry);
     private IntakeSubsystem intake;
     private ShooterSubsystem shooter;
     private VisionSubsystem vision;
 
-    private Drive m_driveCommand;
     private GamepadEx driver1;
     private Button m_shootButton, m_outtakeButton, increaseVelocityButton, decreaseVelocityButton, increaseAngleButton, decreaseAngleButton;
     private Trigger m_intakeButton;
@@ -37,14 +35,12 @@ public class PedroTeleop extends CommandOpMode {
         follower = Constants.createFollower(hardwareMap);
         super.reset();
         follower.startTeleopDrive();
-        m_drive = new DriveSubsystem(hardwareMap);
+
         intake = new IntakeSubsystem(hardwareMap);
         vision = new VisionSubsystem(hardwareMap);
 
         shooter = new ShooterSubsystem(hardwareMap);
         driver1 = new GamepadEx(gamepad1);
-        m_driveCommand = new Drive(m_drive, () -> driver1.getLeftY(), ()-> driver1.getLeftX(), ()->driver1.getRightX());
-
 
 
         m_outtakeButton = (new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER))
@@ -71,8 +67,7 @@ public class PedroTeleop extends CommandOpMode {
                 }), shooter));
 
 
-        register(m_drive, shooter, intake);
-        m_drive.setDefaultCommand(m_driveCommand);
+        register(shooter, intake, vision);
     }
     @Override
     public void run(){

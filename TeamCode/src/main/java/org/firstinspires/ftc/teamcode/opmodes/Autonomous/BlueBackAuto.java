@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.Autonomous;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -8,14 +8,13 @@ import com.pedropathing.paths.PathChain;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
 import com.seattlesolvers.solverslib.util.TelemetryData;
 
-import org.firstinspires.ftc.teamcode.commands.ShooterConstants;
+import org.firstinspires.ftc.teamcode.commands.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.utils.Shooting;
 
@@ -33,14 +32,14 @@ public class BlueBackAuto extends CommandOpMode {
     private final Pose pickup2Control = new Pose(56.808411214953274,38.64485981308411);
 
 
-    private final Pose parkPose = new Pose(56.22429906542056, 30.39252336448599, Math.toRadians(90));
+    private final Pose parkPose = RobotConstants.BLUE_BACK_PARK_POSE;
 
     // Path chains
     private PathChain  grabPickup1, grabPickup2, grabPickup3, grabPickup4;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
     public void buildPaths() {
-        scorePose = startPose.setHeading(ShooterFunctions.getAlignedHeading(startPose, ShooterConstants.GOAL_POS_BLUE));
+        scorePose = startPose.setHeading(ShooterFunctions.getAlignedHeading(startPose, RobotConstants.GOAL_POS_BLUE));
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup1Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
@@ -57,7 +56,7 @@ public class BlueBackAuto extends CommandOpMode {
                 .build();
 
         scorePickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup2Pose, scorePose))
+                .addPath(new BezierCurve(scorePose,pickup2Control, pickup2Pose))
                 .setLinearHeadingInterpolation(pickup2Pose.getHeading(), scorePose.getHeading())
                 .build();
 
@@ -105,7 +104,7 @@ public class BlueBackAuto extends CommandOpMode {
         // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 // Score preload
-                new TurnToCommand(follower, ShooterFunctions.getAlignedHeading(startPose, ShooterConstants.GOAL_POS_BLUE)),
+                new TurnToCommand(follower, ShooterFunctions.getAlignedHeading(startPose, RobotConstants.GOAL_POS_BLUE)),
                 shoot(),
                 // First pickup cycle
                 new FollowPathCommand(follower, grabPickup1),
